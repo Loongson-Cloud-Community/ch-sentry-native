@@ -372,6 +372,8 @@ try_append_module(sentry_value_t modules, const sentry_module_t *module)
     }
 }
 
+// 新abi 使用(defined(__loongarch__) && __loongarch_grlen == 32)
+// 旧abi 使用__loongarch64
 // copied from:
 // https://github.com/google/breakpad/blob/216cea7bca53fa441a3ee0d0f5fd339a3a894224/src/client/linux/minidump_writer/linux_dumper.h#L61-L70
 #if defined(__i386) || defined(__ARM_EABI__)                                   \
@@ -380,7 +382,8 @@ try_append_module(sentry_value_t modules, const sentry_module_t *module)
 typedef Elf32_auxv_t elf_aux_entry;
 #elif defined(__x86_64) || defined(__aarch64__)                               \
     || (defined(__mips__) && _MIPS_SIM != _ABIO32)                            \
-    || (defined(__riscv) && __riscv_xlen == 64)
+    || (defined(__riscv) && __riscv_xlen == 64)                               \
+    || defined(__loongarch64)
 typedef Elf64_auxv_t elf_aux_entry;
 #endif
 
